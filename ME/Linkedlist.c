@@ -1,24 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct node {
+
+struct Node {
     int data;
-    struct node *next;
+    struct Node *next;
 };
-struct node *head = NULL;
 
-struct node* createNode(int val) {
-    struct node *newn = (struct node*)malloc(sizeof(struct node));
-    newn->data = val;
-    newn->next = NULL;
-    return newn;
+struct Node *head = NULL;
+
+// Create a new node
+struct Node* getNode(int val) {
+    struct Node *n = (struct Node*)malloc(sizeof(struct Node));
+    n->data = val;
+    n->next = NULL;
+    return n;
 }
+
+// Display list
 void display() {
-    struct node *temp = head;
+    struct Node *temp = head;
 
-    printf("\nLinked List Simulation:\n");
-
+    printf("\nLinked List: ");
     if (temp == NULL) {
-        printf("List is Empty\n");
+        printf("EMPTY\n");
         return;
     }
 
@@ -29,129 +33,130 @@ void display() {
     printf("NULL\n");
 }
 
-void insertBeg(int val) {
-    struct node *newn = createNode(val);
-    newn->next = head;
-    head = newn;
+// Insert at beginning
+void insertBegin(int val) {
+    struct Node *n = getNode(val);
+    n->next = head;
+    head = n;
     printf("\nInserted %d at Beginning\n", val);
-    display();
 }
 
+// Insert at end
 void insertEnd(int val) {
-    struct node *newn = createNode(val);
+    struct Node *n = getNode(val);
 
     if (head == NULL) {
-        head = newn;
+        head = n;
     } else {
-        struct node *temp = head;
+        struct Node *temp = head;
         while (temp->next != NULL)
             temp = temp->next;
-        temp->next = newn;
+        temp->next = n;
     }
 
     printf("\nInserted %d at End\n", val);
-    display();
 }
 
+// Insert at any position
 void insertPos(int val, int pos) {
-    struct node *newn = createNode(val);
+    struct Node *n = getNode(val);
 
     if (pos == 1) {
-        newn->next = head;
-        head = newn;
-        display();
+        n->next = head;
+        head = n;
+        printf("\nInserted %d at Position %d\n", val, pos);
         return;
     }
 
-    struct node *temp = head;
-    int i;
-
-    for (i = 1; i < pos-1 && temp != NULL; i++) {
+    struct Node *temp = head;
+    for (int i = 1; i < pos - 1 && temp != NULL; i++) {
         temp = temp->next;
     }
 
     if (temp == NULL) {
-        printf("\nInvalid Position\n");
+        printf("\nInvalid Position!\n");
         return;
     }
 
-    newn->next = temp->next;
-    temp->next = newn;
+    n->next = temp->next;
+    temp->next = n;
 
     printf("\nInserted %d at Position %d\n", val, pos);
-    display();
 }
 
-void deleteBeg() {
+// Delete beginning
+void deleteBegin() {
     if (head == NULL) {
-        printf("\nList Empty\n");
+        printf("\nList Empty!\n");
         return;
     }
 
-    struct node *temp = head;
+    struct Node *temp = head;
     head = head->next;
+    printf("\nDeleted %d from Beginning\n", temp->data);
     free(temp);
-
-    printf("\nDeleted from Beginning\n");
-    display();
 }
 
+// Delete end
 void deleteEnd() {
     if (head == NULL) {
-        printf("\nList Empty\n");
+        printf("\nList Empty!\n");
         return;
     }
 
-    struct node *temp = head;
+    struct Node *temp = head, *prev = NULL;
 
     if (temp->next == NULL) {
+        printf("\nDeleted %d from End\n", temp->data);
         head = NULL;
         free(temp);
-    } else {
-        struct node *prev = NULL;
-        while (temp->next != NULL) {
-            prev = temp;
-            temp = temp->next;
-        }
-        prev->next = NULL;
-        free(temp);
+        return;
     }
 
-    printf("\nDeleted from End\n");
-    display();
+    while (temp->next != NULL) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    printf("\nDeleted %d from End\n", temp->data);
+    prev->next = NULL;
+    free(temp);
 }
 
+// Search element
 void search(int val) {
-    struct node *temp = head;
+    struct Node *temp = head;
     int pos = 1;
+
     while (temp != NULL) {
         if (temp->data == val) {
-            printf("\n%d found at position %d\n", val, pos);
+            printf("\n%d Found at Position %d\n", val, pos);
             return;
         }
         temp = temp->next;
         pos++;
     }
-    printf("\nValue Not Found\n");
+    printf("\nValue NOT Found!\n");
 }
 
+// Count nodes
 void count() {
-    struct node *temp = head;
-    int c = 0;
+    struct Node *temp = head;
+    int cnt = 0;
 
     while (temp != NULL) {
-        c++;
+        cnt++;
         temp = temp->next;
     }
 
-    printf("\nTotal Nodes = %d\n", c);
+    printf("\nTotal Nodes: %d\n", cnt);
 }
 
 int main() {
     int ch, val, pos;
 
     while (1) {
-        printf("\n--- Linked List Simulation ---\n");
+        printf("\n--- LINKED LIST MENU ---\n");
         printf("1. Insert at Beginning\n");
         printf("2. Insert at End\n");
         printf("3. Insert at Position\n");
@@ -159,35 +164,35 @@ int main() {
         printf("5. Delete at End\n");
         printf("6. Search Element\n");
         printf("7. Count Nodes\n");
-        printf("8. Display\n");
+        printf("8. Display List\n");
         printf("9. Exit\n");
 
-        printf("Enter choice : ");
+        printf("Enter Choice: ");
         scanf("%d", &ch);
 
-        switch(ch) {
+        switch (ch) {
             case 1:
-                printf("Enter value : ");
+                printf("Enter Value: ");
                 scanf("%d", &val);
-                insertBeg(val);
+                insertBegin(val);
                 break;
 
             case 2:
-                printf("Enter value : ");
+                printf("Enter Value: ");
                 scanf("%d", &val);
                 insertEnd(val);
                 break;
 
             case 3:
-                printf("Enter value : ");
+                printf("Enter Value: ");
                 scanf("%d", &val);
-                printf("Enter position : ");
+                printf("Enter Position: ");
                 scanf("%d", &pos);
                 insertPos(val, pos);
                 break;
 
             case 4:
-                deleteBeg();
+                deleteBegin();
                 break;
 
             case 5:
@@ -195,7 +200,7 @@ int main() {
                 break;
 
             case 6:
-                printf("Enter value : ");
+                printf("Enter Value: ");
                 scanf("%d", &val);
                 search(val);
                 break;
@@ -212,7 +217,7 @@ int main() {
                 exit(0);
 
             default:
-                printf("Invalid Choice\n");
+                printf("\nInvalid Choice!\n");
         }
     }
 
